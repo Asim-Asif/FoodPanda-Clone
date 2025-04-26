@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+    <title>Admin Dashboard</title>
+</head>
+<body style="background-color: #f7f7f7;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light cont-2" id="navbarShadow">
+        <div class="container-fluid nav">
+            <div class="Foodpanda-logo">
+                <img src="https://th.bing.com/th/id/R.989b34f1b5ef1fece36a25fd80f60308?rik=y24ZjvzmEWZkZA&pid=ImgRaw&r=0" alt="Foodpanda" class="img-fluid">
+                <a href="">Foodpanda</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="admin.html">Admin</a></li>
+                </ul>
+                <button class="btn main-btn" type="button" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4 admin-heading">
+        <h2>Manage Dishes</h2>
+        <button class="btn add-btn btn-secondary"  data-bs-toggle="modal" data-bs-target="#dishModal">Add Dish</button>
+    </div>
+    <div class="container mt-4" style="padding: 0 52px 0 32px;">
+        <div id="dishesList" class="row"></div>
+    </div>
+
+    <!-- Modal for Adding/Editing Dish -->
+    <div class="modal fade" id="dishModal" tabindex="-1" aria-labelledby="dishModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dishModalLabel">Add Dish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="dishForm">
+                        <div class="mb-3">
+                            <label for="dishName" class="form-label">Dish Name</label>
+                            <input type="text" class="form-control" id="dishName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dishPrice" class="form-label">Price (PKR)</label>
+                            <input type="number" class="form-control" id="dishPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dishCategory" class="form-label">Category</label>
+                            <select class="form-select" id="dishCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Fast Food">Fast Food</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Beverage">Beverage</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dishDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="dishDescription" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dishImage" class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="dishImage">
+                        </div>
+                        <input type="hidden" id="dishId">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveDishBtn">Save Dish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="admin.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
