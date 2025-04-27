@@ -1,4 +1,4 @@
-import { auth, onAuthStateChanged, signOut, db, collection, getDocs, query, orderBy, addDoc, updateDoc, where, doc } from './firebase.js';
+import { auth, onAuthStateChanged, signOut, db, collection, getDocs, query, orderBy, addDoc, updateDoc, where, doc, getDoc } from './firebase.js';
 
 const showAlert = (icon, title, text) => Swal.fire({ icon, title, text });
 
@@ -101,6 +101,25 @@ const loadDishes = async () => {
     }
 };
 
+// Function to wait for user document with retries
+const waitForUserDoc = async (uid, retries = 3, delay = 1000) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const userDoc = await getDoc(doc(db, "users", uid));
+            if (userDoc.exists()) {
+                return { exists: true, data: userDoc.data() };
+            }
+            console.log(`Attempt ${i + 1}: User document not found, retrying...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        } catch (error) {
+            console.error(`Attempt ${i + 1}: Error fetching user document:`, error);
+            if (i === retries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+    return { exists: false };
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -108,9 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "index.html";
         } else {
             try {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    const role = userDoc.data().role;
+                const result = await waitForUserDoc(user.uid);
+                if (result.exists) {
+                    const role = result.data.role;
                     if (role === "user") {
                         console.log("User authenticated, UID:", user.uid);
                         loadDishes();
@@ -120,12 +139,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.location.href = "admin.html";
                     }
                 } else {
-                    showAlert("error", "User Not Found", "User data not found.");
+                    showAlert("error", "User Not Found", "User data not found. Please sign up again.");
                     window.location.href = "index.html";
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
-                showAlert("error", "Error", "Failed to fetch user data.");
+                showAlert("error", "Error", `Failed to fetch user data: ${error.message}`);
                 window.location.href = "index.html";
             }
         }
