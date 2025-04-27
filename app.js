@@ -11,8 +11,3 @@ new Typed("#autowriting", {
   backSpeed: 100,
   loop: true
 });
-
-window.addEventListener("scroll", () => {
-  const navbar = document.getElementById("navbarShadow");
-  navbar.classList.toggle("boxShadow", window.scrollY > 0);
-});
